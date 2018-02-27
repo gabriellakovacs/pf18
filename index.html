@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>portfolio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <style media="screen">
+      body, html {
+      	margin: 0;
+      	padding: 0;
+      	overflow-x: hidden;
+        font-family: monospace;
+        color: white;
+        padding-top: 10vh;
+      }
+
+      h1 {
+          padding-bottom: 7vh;
+          font-size: 40px;
+      }
+
+      h2 {
+          font-size: 30px;
+      }
+
+      h1, h2 {
+          font-weight: normal;
+      }
+
+      a {
+          color: white;
+          text-decoration: none;
+          transition: 0.5s cubic-bezier(0,.14,.55,.99) ;
+          background-color: #fff;
+          color: black;
+          padding: 0 15px;
+      }
+
+      .works {
+          font-size: 50px;
+      }
+
+      .works a {
+          background-color: #fff;
+          color: black;
+      }
+
+      .works li {
+          margin-bottom: 25px;
+      }
+
+      a:hover {
+          background-color: #000;
+          color: #fff;
+      }
+
+      ul {
+          padding: 0;
+      }
+
+      li {
+          list-style: none;
+          display: inline-block;
+      }
+
+      canvas {
+          position: fixed;
+          top: 0;
+          left: 0;
+      }
+
+      main {
+          display: block;
+          position: relative;
+          width: 64vw;
+          max-width: 1000px;
+          min-width: 290px;
+          margin: 0 auto;
+          transition: opacity 1.5s cubic-bezier(0,.14,.55,.99) ;
+      }
+
+      @media (max-width: 400px) {
+        main {
+            width: 290px;
+        }
+      }
+
+      main.invisible {
+          opacity: 0;
+      }
+
+      .contact {
+          font-size: 20px;
+      }
+
+    </style>
+  </head>
+  <body>
+
+    <canvas></canvas>
+
+    <canvas class="canvas_blue"></canvas>
+    <canvas class="canvas_red"></canvas>
+
+
+    <main class="invisible">
+        <h1>Gabriella Kovács / web developer</h1>
+
+        <h2>Selected Work</h2>
+
+        <ul class="works">
+
+            <li>
+                <a href="https://www.volkshaus.ch/" target="_blank">Volkshaus</a>
+            </li>
+            <li>
+                <a href="https://spkantonzh.ch/" target="_blank">Sp Kanton Zürich</a>
+            </li>
+            <li>
+                <a href="http://offshorestudio.ch/" target="_blank">Offshore Studio</a>
+            </li>
+            <li>
+                <a href="https://www.naturalcapital.online/" target="_blank">Natural Capital</a>
+            </li>
+            <li>
+                <a href="http://www.hej.ch/" target="_blank">Hej</a>
+            </li>
+            <li>
+                <a href="http://birthday16.y7k.rip/" target="_blank">Y7K birthday</a>
+            </li>
+            <li>
+                <a href="https://raffinerie.com/" target="_blank">Raffinerie</a>
+            </li>
+            <li>
+                <a href="https://www.lesbianlivesproject.com/" target="_blank">The Lesbian Lives Project</a>
+            </li>
+            <li>
+                <a href="https://y7k.com/" target="_blank">Y7K</a>
+            </li>
+            <li>
+                <a href="https://daizy.ch/" target="_blank">Daizy</a>
+            </li>
+        </ul>
+
+        <ul class="contact">
+            <li>
+                <a href="mailto:kovacsxgabriella@gmail.com" target="_blank">email</a>
+            </li>
+            <li>
+                <a href="https://uk.linkedin.com/in/gabriella-kovács-95915310a" target="_blank">linkedin</a>
+            </li>
+            <li>
+                <a href="https://github.com/gabriellakovacs" target="_blank">github</a>
+            </li>
+        </ul>
+
+        <div class="accelerometer"></div>
+    </main>
+
+
+    <!-- EYES -->
+    <script src="js/eyes.js"></script>
+
+    <!-- CIRCLES MOVING -->
+    <!-- <script src="js/circles_moving.js"></script> -->
+
+  </body>
+</html>
