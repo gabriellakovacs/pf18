@@ -10,10 +10,13 @@
       body, html {
       	margin: 0;
       	padding: 0;
-      	overflow-x: hidden;
         font-family: monospace;
         color: white;
-        padding-top: 10vh;
+      }
+
+      body {
+          padding-top: 20vh;
+          overflow-x: hidden;
       }
 
       h1 {
@@ -52,8 +55,8 @@
       }
 
       a:hover {
-          background-color: #000;
-          color: #fff;
+          //background-color: #888;
+          //color: #fff;
       }
 
       ul {
@@ -80,8 +83,8 @@
           min-width: 290px;
           margin: 0 auto;
           opacity: 1;
-          transform: translate(0, 0);
-          transition: all 0.5s cubic-bezier(0,.14,.55,.99) ;
+          transform: translate(0, 1px);
+          transition: all 4s cubic-bezier(.05,.23,.24,.96) ;
       }
 
       @media (max-width: 400px) {
@@ -114,9 +117,9 @@
 
       .hoverDisplay.on { opacity: 1; }
 
-      .hoverDisplay span { position: absolute; color: red; mix-blend-mode: difference; font-family: 'Bungee Shade', cursive; }
-      .hoverDisplay span:nth-child(3n + 1) { color: blue; }
-      .hoverDisplay span:nth-child(3n + 2) { color: green; }
+      .hoverDisplay span { position: absolute; color: green; mix-blend-mode: difference; font-family: 'Bungee Shade', cursive; }
+      .hoverDisplay span:nth-child(3n + 1) { color: red; }
+      .hoverDisplay span:nth-child(3n + 2) { color: blue; }
 
     </style>
   </head>
@@ -141,7 +144,7 @@
                 <a class="js-hover-trigger" href="http://offshorestudio.ch/" target="_blank">Offshore Studio</a>
             </li>
             <li>
-                <a class="js-hover-trigger" href="https://www.naturalcapital.online/" target="_blank">Natural Capital</a>
+                <a class="js-hover-trigger" href="http://naturalcapital.online/" target="_blank">Natural Capital</a>
             </li>
             <li>
                 <a class="js-hover-trigger" href="http://www.hej.ch/" target="_blank">Hej</a>
@@ -153,7 +156,7 @@
                 <a class="js-hover-trigger" href="https://raffinerie.com/" target="_blank">Raffinerie</a>
             </li>
             <li>
-                <a class="js-hover-trigger" href="https://www.lesbianlivesproject.com/" target="_blank">The Lesbian Lives Project</a>
+                <a class="js-hover-trigger" href="http://lesbianlivesproject.com/" target="_blank">The Lesbian Lives Project</a>
             </li>
             <li>
                 <a class="js-hover-trigger" href="https://y7k.com/" target="_blank">Y7K</a>
@@ -180,6 +183,7 @@
     </main>
 
     <div class="hoverDisplay js-hover-display"></div>
+
 
     <!-- CANVAS -->
     <script src="js/canvas.js"></script>

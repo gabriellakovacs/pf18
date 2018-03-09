@@ -3,8 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
     /****************
     CHANGE PARAMETERS IN ANIMATION
     *****************/
-    var backgroundColor = '#1d211e';
-    var nrOfEyes = 11;
+    var nrOfEyes = 30;
 
 
     //DOM ELEMENTS
@@ -16,9 +15,6 @@ document.addEventListener("DOMContentLoaded", function() {
     var h;
 
 
-
-
-
     /************
     EYE FUNCTIONS
     ************/
@@ -28,47 +24,54 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function Pupil(position, radius) {
-        this.position = position;
+        this.x = position.x;
+        this.y = position.y;
         this.radius = radius;
     }
 
     function Eye() {
-        this.position;
-        this.radius = Math.round(Math.random() * 30 + 10);
+        this.x;
+        this.y;
+        this.radius = Math.round(Math.random() * 40 + 10);
         this.pupil;
         this.blink = false;
-        this.blinkPorcess = 0;
+        this.blinkOpen = false;
+        this.nrOfBlinks = 0;
         this.open = 0;
     }
 
     Eye.prototype.generatePosition = function() {
-        var emptySpacePercentageTop = 0.4;
-        var pOfYBeingInTheTopSection = 0.65;
+        // var emptySpacePercentageTop = 0.4;
+        // var pOfYBeingInTheTopSection = 0.65;
+        //
+        // if(Math.random() < pOfYBeingInTheTopSection) {
+        //     var y = Math.random() * h * emptySpacePercentageTop - h / 2;
+        // } else {
+        //     var y = Math.random() * h - h / 2;
+        // }
+        //
+        // if(y > -h / 2 * (1 - emptySpacePercentageTop)) {
+        //     var x = Math.random() * (w * 0.18 - 10) +  (w * (0.5 - 0.18) + 5);
+        //
+        //     if(Math.random() < 0.5) {
+        //         x *= -1;
+        //     }
+        // } else {
+        //     var x = Math.random() * w - w / 2;
+        // }
 
-        if(Math.random() < pOfYBeingInTheTopSection) {
-            var y = Math.random() * h * emptySpacePercentageTop - h / 2;
-        } else {
-            var y = Math.random() * h - h / 2;
-        }
+        var x = Math.random() * w - w / 2;
+        var y = Math.random() * h - h / 2;
 
-        if(y > -h / 2 * (1 - emptySpacePercentageTop)) {
-            var x = Math.random() * (w * 0.18 - 10) +  (w * (0.5 - 0.18) + 5);
-
-            if(Math.random() < 0.5) {
-                x *= -1;
-            }
-        } else {
-            var x = Math.random() * w - w / 2;
-        }
-
-        this.position =  new Point(x, y);
+        this.x =  x;
+        this.y =  y;
         this.pupil = new Pupil(new Point(x, y), this.radius * 0.67);
 
     }
 
     Eye.prototype.drawEyeball = function() {
         ctx.beginPath();
-        ctx.arc(this.position.x, this.position.y, this.radius, 0, 7);
+        ctx.arc(this.x, this.y, this.radius, 0, 7);
         ctx.fillStyle = 'rgb(255, 255, 255)';
         ctx.fill();
         ctx.stroke();
@@ -76,39 +79,81 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     Eye.prototype.drawPupil = function(mousePos) {
-        var dist = Math.sqrt(Math.pow(mousePos.x - this.position.x, 2) + Math.pow(mousePos.y - this.position.y, 2));
+        var dist = Math.sqrt(Math.pow(mousePos.x - this.x, 2) + Math.pow(mousePos.y - this.y, 2));
         var distRatio = Math.min(dist/60 * 5, this.pupil.radius);
 
-        this.pupil.position.x = this.position.x + ((mousePos.x - this.position.x) * distRatio) / dist;
-        this.pupil.position.y = this.position.y + ((mousePos.y - this.position.y) * distRatio) / dist;
+        this.pupil.x = this.x + ((mousePos.x - this.x) * distRatio) / dist;
+        this.pupil.y = this.y + ((mousePos.y - this.y) * distRatio) / dist;
 
         ctx.beginPath();
-        ctx.arc(this.pupil.position.x, this.pupil.position.y, this.pupil.radius, 0, 7);
+        ctx.arc(this.pupil.x, this.pupil.y, this.pupil.radius, 0, 7);
         ctx.fillStyle = 'black';
         ctx.fill();
         ctx.closePath();
     }
 
     Eye.prototype.openEye = function() {
-        if(Math.pow(this.open, 10) <= 1) {
-            this.open += 0.06;
+        if(this.blink) {
+                console.log('this.open ' + this.open);
+            if(this.nrOfBlinks < 1) {
+                //OPENING PROCESS
+                if(this.blinkOpen) {
+                    this.open += 0.09;
+                    if(Math.pow(this.open, 2) >= 1) {
+                        this.blinkOpen = false;
+                    }
+                }
+                //CLOSING PROCESS
+                else {
+                    this.open -= 0.06;
+                    if(this.open <= 0.6) {
+                        this.blinkOpen = true;
+                        this.nrOfBlinks += 1;
+                    }
+                }
+            }
+
+
+
 
             var moveUp = Math.pow(this.open, 10) * this.radius;
 
             ctx.beginPath();
-            ctx.moveTo(this.position.x - this.radius, this.position.y - this.radius - this.radius * 0.67 - moveUp);
-            ctx.lineTo(this.position.x - this.radius, this.position.y + this.radius - this.radius / 2 - moveUp);
+            ctx.moveTo(this.x - this.radius, this.y - this.radius - this.radius * 0.67 - moveUp);
+            ctx.lineTo(this.x - this.radius, this.y + this.radius - this.radius / 2 - moveUp);
             ctx.quadraticCurveTo(
-                this.position.x,
-                this.position.y + this.radius + this.radius / 2 - moveUp - Math.pow(this.open, 10) * this.radius * 2,
-                this.position.x + this.radius,
-                this.position.y + this.radius - this.radius / 2 - moveUp
+                this.x,
+                this.y + this.radius + this.radius / 2 - moveUp - moveUp * 2,
+                this.x + this.radius,
+                this.y + this.radius - this.radius / 2 - moveUp
             );
-            ctx.lineTo(this.position.x + this.radius, this.position.y - this.radius - this.radius * 0.67 - moveUp);
+            ctx.lineTo(this.x + this.radius, this.y - this.radius - this.radius * 0.67 - moveUp);
             ctx.closePath();
             ctx.fillStyle = 'black';
             ctx.fill();
+        } else {
+            this.blinkOpen = false;
+            if(Math.pow(this.open, 10) <= 1) {
+                this.open += 0.06;
+
+                var moveUp = Math.pow(this.open, 10) * this.radius;
+
+                ctx.beginPath();
+                ctx.moveTo(this.x - this.radius, this.y - this.radius - this.radius * 0.67 - moveUp);
+                ctx.lineTo(this.x - this.radius, this.y + this.radius - this.radius / 2 - moveUp);
+                ctx.quadraticCurveTo(
+                    this.x,
+                    this.y + this.radius + this.radius / 2 - moveUp - Math.pow(this.open, 10) * this.radius * 2,
+                    this.x + this.radius,
+                    this.y + this.radius - this.radius / 2 - moveUp
+                );
+                ctx.lineTo(this.x + this.radius, this.y - this.radius - this.radius * 0.67 - moveUp);
+                ctx.closePath();
+                ctx.fillStyle = 'black';
+                ctx.fill();
+            }
         }
+
     }
 
     Eye.prototype.draw = function(mousePos) {
@@ -132,6 +177,25 @@ document.addEventListener("DOMContentLoaded", function() {
 
     }
 
+    Eye.prototype.isInside = function(thing) {
+        if (thing.radius) {
+            var radius = thing.radius;
+        } else {
+            var radius = 0;
+        }
+
+        if(thing.x - radius < this.x + this.radius &&
+           thing.x + radius > this.x - this.radius &&
+           thing.y - radius < this.y + this.radius &&
+           thing.y + radius > this.y - this.radius
+       ) {
+           return true;
+       } else {
+           return false;
+       }
+    }
+
+
     /************
     ALL EYES ANIMATION
     ************/
@@ -139,31 +203,24 @@ document.addEventListener("DOMContentLoaded", function() {
         this.step = 0;
         this.eyeList =  [];
         this.openEyeList =  [];
+        this.openEyeListLength = this.openEyeList.length;
         this.nrOfEyes = nrOfEyes;
         this.mousePosChanged = false;
         this.mousePos = new Point(0, 0);
     }
 
     EyeAnimation.prototype.checkIfEyesAreTooClose = function(eye) {
-        console.log('---------------------------');
-        console.log('checkIfEyesAreTooClose');
-        console.log('eye.position.x ' + eye.position.x);
-        console.log('eye.position.y ' + eye.position.y);
+
         var eyeListLength = this.eyeList.length;
         for(var i = 0; i < eyeListLength; i++) {
-            if(eye.position.x < this.eyeList[i].position.x + this.eyeList[i].radius &&
-               eye.position.x > this.eyeList[i].position.x - this.eyeList[i].radius &&
-               eye.position.y < this.eyeList[i].position.y + this.eyeList[i].radius &&
-               eye.position.y < this.eyeList[i].position.y - this.eyeList[i].radius) {
-                eye.generatePosition();
-                this.checkIfEyesAreTooClose(eye);
-                break;
+            if(this.eyeList[i].isInside(eye)) {
+                   eye.generatePosition();
+                   this.checkIfEyesAreTooClose(eye);
+                   break;
             }
         }
 
         this.eyeList.push(eye);
-        console.log('checkIfEyesAreTooClose ENd');
-        console.log('---------------------------');
 
     }
 
@@ -175,7 +232,6 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-
     EyeAnimation.prototype.animate = function() {
         var self = this;
 
@@ -183,7 +239,13 @@ document.addEventListener("DOMContentLoaded", function() {
             self.animate();
         });
 
-        if(this.openEyeList.length === this.nrOfEyes) {
+        if(this.openEyeList.length === 6) {
+            setTimeout(function() {
+                document.querySelector('main').classList.remove('invisible');
+            }, 100);
+        }
+
+        if(this.openEyeListLength === this.nrOfEyes) {
 
             // if(mousePosChanged) {
                 this.mousePosChanged = false;
@@ -192,15 +254,14 @@ document.addEventListener("DOMContentLoaded", function() {
                 for(var i = 0; i < this.nrOfEyes; i++) {
                     this.openEyeList[i].draw(this.mousePos);
                 }
-                setTimeout(function() {
-                    document.querySelector('main').classList.remove('invisible');
-                }, 500);
+
 
             //}
         } else {
             //should an eye open?
             if(Math.random() < Math.min(this.step, 0.4)) {
                 this.openEyeList.push(this.eyeList[0]);
+                this.openEyeListLength += 1;
                 this.eyeList.shift();
             }
 
@@ -221,6 +282,20 @@ document.addEventListener("DOMContentLoaded", function() {
 
             self.mousePos.x -= w/2;
             self.mousePos.y -= h/2;
+
+
+            for(var i = 0; i < self.openEyeListLength; i++) {
+                if(self.openEyeList[i].isInside(self.mousePos)) {
+                    if(!self.openEyeList[i].blink) {
+                        console.log('-------------------------------');
+                    }
+
+                    self.openEyeList[i].blink = true;
+                } else {
+                    self.openEyeList[i].blink = false;
+                    self.openEyeList[i].nrOfBlinks = 0;
+                }
+            }
        }, false);
     }
 
@@ -245,11 +320,10 @@ document.addEventListener("DOMContentLoaded", function() {
                     self.hoverDisplay.innerHTML = '';
                     self.hoverDisplay.classList.add('on');
                     self.hoverText = e.target.innerHTML;
+
                     self.interval = 1000;
 
-                    setTimeout(function() {
-                        self.animate();
-                    }, self.interval);
+                    self.animate();
                 }
             })
 
@@ -261,6 +335,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     HoverEffect.prototype.animate = function() {
+
         this.interval -= 100;
         this.interval = Math.max(this.interval, 150);
 
@@ -296,6 +371,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
          //set Point(0, 0) to be at the middle of the canvas
          ctx.translate(canvas.width / 2, canvas.height / 2);
+
+         ctx.fillStyle = 'black';
+         ctx.fillRect(-w/2, -h/2, w, h);
      }
 
 
@@ -325,12 +403,16 @@ document.addEventListener("DOMContentLoaded", function() {
     var hoverEffect = new HoverEffect();
     hoverEffect.init();
 
+
+    document.addEventListener('click', function(evt) {
+
+
+        var mousePos = new Point(evt.clientX, evt.clientY);
+
+        mousePos.x -= w/2;
+        mousePos.y -= h/2;
+
+        document.querySelector('.console').innerHTML = mousePos.x + ', ' + mousePos.y;
+   }, false);
+
 })
-
-
-
-
-function clearCanvas(backgroundColor){
-    c.fillStyle = backgroundColor;
-    c.fillRect(-w/2, -h/2, w, h);
-}
